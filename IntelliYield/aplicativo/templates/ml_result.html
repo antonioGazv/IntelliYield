@@ -1,0 +1,30 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Resultado</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+
+<body>
+    <div id="header">
+        <h1>INTELLIYIELD</h1>
+    </div>
+    <div id="resultado">
+        <p>Predição de plantio: {{ predicoes }}</p>
+        <div id="detalhes">
+            <h2>Detalhes dos algoritmos:</h2>
+            <p>{{ detalhesrfc }}</p>
+            <p>{{ detalhesknn }}</p>
+            <p>{{ detalhessvc }}</p>
+            <p>{{ detalheslda }}</p>
+            
+        </div>
+    </div>
+    
+    
+</body>
+
+</html>
