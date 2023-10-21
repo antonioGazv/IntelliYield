@@ -1,0 +1,20 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Escolher Plantio</title>
+</head>
+<body>
+    <h1>Escolha o tipo de plantio:</h1>
+    <form method="post">
+        {% csrf_token %}
+        <select name="plantio">
+            {% for plantio, requisitos in requisitos_plantios.items %}
+                <option value="{{ plantio }}">{{ plantio }}</option>
+            {% endfor %}
+        </select>
+        <input type="submit" value="Calcular Compatibilidade">
+    </form>
+</body>
+</html>
