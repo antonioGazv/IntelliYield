@@ -7,7 +7,7 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from .codigo_rec import tratarDados, resultados, rfc, knn, svc, lda
 from .models import Historico
-from .forms import MLForm
+from .forms import MLForm, CustomUserChangeForm
 
 def register(request):
     form = UserCreationForm()
@@ -42,9 +42,32 @@ def user_logout(request):
     return redirect('index')
 
 @login_required
+def editarConta(request):
+    if request.method == 'POST':
+        form = CustomUserChangeForm(request.POST, instance=request.user)
+        if form.is_valid():
+            form.save()
+            return redirect('index')
+    else:
+        form = CustomUserChangeForm(instance=request.user)
+    return render(request, 'editarConta.html', {'form': form})
+
+
+@login_required
+def excluirConta(request):
+    if request.method == 'POST':
+        request.user.delete()
+        return redirect('index')
+    return render(request, 'excluirConta.html')
+
+@login_required
 def historico(request):
     resultados = Historico.objects.filter(usuario=request.user)
     return render(request, 'historico.html', {'resultados': resultados})
+
+@login_required
+def perfil(request):
+    return render(request, 'perfil.html')
 
 @login_required
 def user_input(request):

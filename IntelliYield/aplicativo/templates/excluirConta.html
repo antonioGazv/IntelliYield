@@ -2,12 +2,10 @@
 
 <!DOCTYPE html>
 <html>
-
 <head>
-    <title>Histórico de Resultados</title>
+    <title>Excluir Conta</title>
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
 </head>
-
 <body>
     <div id="header">
         <h1>INTELLIYIELD</h1>
@@ -25,21 +23,12 @@
                 </svg></button>
         </a>
     </div>
-    <div>
-        {% if resultados %}
-        <h1>Histórico de Resultados</h1>
-        <ul>
-            {% for resultado in resultados %}
-            <li>
-                <strong>Predição:</strong> {{ resultado.predicao }}<br>
-                <strong>Detalhes:</strong> {{ resultado.detalhes }}<br>
-            </li>
-            {% endfor %}
-        </ul>
-        {% else %}
-        <p>Nenhum resultado disponível.</p>
-        {% endif %}
-    </div>
+    <h2>Excluir Conta</h2>
+    <form method="post">
+        {% csrf_token %}
+        <p>Tem certeza de que deseja excluir sua conta? Esta ação é irreversível.</p>
+        <button type="submit">Confirmar Exclusão</button>
+    </form
+    
 </body>
-
 </html>
