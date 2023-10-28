@@ -11,10 +11,17 @@
 <body>
     <div id="header">
         <h1>INTELLIYIELD</h1>
+        <a href="{% url 'register' %}"><button>Cadastro</button></a>
+        <a href="{% url 'login' %}"><button>Login</button></a>
+        {% if user.is_authenticated %}
+        <p>Olá, {{ user.username }}! <a href="{% url 'user_logout' %}">Sair</a></p>
+        {% else %}
+        <p>Você não está logado.</p>
+        {% endif %}
     </div>
     <div id="menu">
-        <a href="input/rec"><button>Recomendação</button></a>
-        <a href="input/comp"><button>Compatibilidade</button></a>
+        <a href="input/rec"><button>INICIAR FERRAMENTA</button></a>
+        <a href="historico"><button>VERIFICAR HISTORICO</button></a>
     </div>
 
 </body>

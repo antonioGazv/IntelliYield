@@ -68,8 +68,10 @@ button:hover {
 }
 
 #menu{
+    display: flex;
     justify-content: center;
-    border: 1px red;
+    align-items: center;
+    font-size: 100px;
 }
 
 #detalhes{

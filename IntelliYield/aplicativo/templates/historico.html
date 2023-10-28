@@ -1,0 +1,36 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Login</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+
+<body>
+    <div id="header">
+        <a href="{% url 'index' %}"><button>
+                <h1>INTELLIYIELD</h1>
+            </button></a>
+        <a href="{% url 'register' %}"><button>Cadastro</button></a>
+        <a href="{% url 'login' %}"><button>Login</button></a>
+    </div>
+    <div>
+        {% if resultados %}
+        <h1>Histórico de Resultados</h1>
+        <ul>
+            {% for resultado in resultados %}
+            <li>
+                <strong>Predição:</strong> {{ resultado.predicao }}<br>
+                <strong>Detalhes:</strong> {{ resultado.detalhes }}<br>
+            </li>
+            {% endfor %}
+        </ul>
+        {% else %}
+        <p>Nenhum resultado disponível.</p>
+        {% endif %}
+    </div>
+</body>
+
+</html>

@@ -1,22 +1,52 @@
 from django.contrib.auth.forms import UserCreationForm
-from django.contrib.auth import login
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth import authenticate, logout
+from django.contrib.auth import login as auth_login  
+from django.contrib import messages
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from .codigo_rec import tratarDados, resultados, rfc, knn, svc, lda
-from .codigo_comp import escolher_plantio
+from .models import Historico
 from .forms import MLForm
 
 def register(request):
+    form = UserCreationForm()
     if request.method == 'POST':
         form = UserCreationForm(request.POST)
         if form.is_valid():
-            user = form.save()
-            login(request, user)
-            return redirect('/')
-    else:
-        form = UserCreationForm()
-    return render(request, 'register.html', {'form': form})
+            form.save()
+            username = form.cleaned_data['username']
+            password = form.cleaned_data['password1']
+            user = authenticate(username=username, password=password)
+            auth_login(request, user)
+            return redirect('index')
+    context = {'form' :form}
+    return render(request, 'register.html', context)
 
+def user_login(request):
+    if request.method == 'POST':
+        username = request.POST['username']
+        password = request.POST['password']
+        user = authenticate(username=username, password=password)
+        if user is not None:
+            auth_login(request, user)
+            return redirect('index')  # Redireciona para a URL definida em LOGIN_REDIRECT_URL
+        else:
+            messages.error(request, "Dados incorretos.")
+            return redirect('login.html')
+        
+    return render(request, 'login.html')
+    
+def user_logout(request):
+    logout(request)
+    return redirect('index')
+
+@login_required
+def historico(request):
+    resultados = Historico.objects.filter(usuario=request.user)
+    return render(request, 'historico.html', {'resultados': resultados})
+
+@login_required
 def user_input(request):
     if request.method == 'POST':
         form = MLForm(request.POST)
@@ -36,7 +66,7 @@ def user_input(request):
             svcPredUser, svcPrecisao = svc(X_train_norm, y_train, X_test, user_data_norm, y_test)
             ldaPredUser, ldaPrecisao = lda(X_train_norm, y_train, X_test, user_data_norm, y_test)
             
-            predicoes, detalhesrfc, detalhesknn, detalhessvc, detalheslda = resultados(rfcPredUser, knnPredUser, svcPredUser, ldaPredUser, rfcPrecisao, knnPrecisao, svcPrecisao, ldaPrecisao)
+            predicoes, detalhesrfc, detalhesknn, detalhessvc, detalheslda = resultados(request, rfcPredUser, knnPredUser, svcPredUser, ldaPredUser, rfcPrecisao, knnPrecisao, svcPrecisao, ldaPrecisao)
 
             return render(request, 'result_rec.html', {'predicoes': predicoes, 'detalhesrfc': detalhesrfc, 'detalhesknn': detalhesknn, 'detalhessvc': detalhessvc, 'detalheslda': detalheslda})
     else:
@@ -46,23 +76,4 @@ def user_input(request):
 
 def index(request):
     return render(request, 'index.html')
-
-def calcular_compatibilidade(request):
-    if request.method == 'POST':
-        form = MLForm(request.POST)
-        if form.is_valid():
-            N = form.cleaned_data['N']
-            P = form.cleaned_data['P']
-            K = form.cleaned_data['K']
-            temperature = form.cleaned_data['temperature']
-            humidity = form.cleaned_data['humidity']
-            ph = form.cleaned_data['ph']
-            rainfall = form.cleaned_data['rainfall']
-
-        plantio_escolhido = request.POST['plantio']
-        if plantio_escolhido in requisitos_plantios:
-            usuario_data = [N, P, K, temperature, humidity, ph, rainfall]
-            requisitos = requisitos_plantios[plantio_escolhido]
-            compatibilidade = calcular_compatibilidade_solo(usuario_data, requisitos)
-            return render(request, 'result_comp.html', {'compatibilidade': compatibilidade})
 

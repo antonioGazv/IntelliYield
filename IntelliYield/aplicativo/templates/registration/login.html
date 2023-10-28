@@ -3,7 +3,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Registro</title>
+    <title>Login</title>
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
 </head>
 <body>
@@ -12,12 +12,15 @@
         <a href="{% url 'register' %}"><button>Cadastro</button></a>
         <a href="{% url 'login' %}"><button>Login</button></a>
     </div>
-    <h2>Registro</h2>
+    <h2>Login</h2>
     <form method="post">
         {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit">Registrar</button>
+        <label for="username">Nome de usuário:</label>
+        <input type="text" name="username" id="username" required><br>
+        <label for="password">Senha:</label>
+        <input type="password" name="password" id="password" required><br>
+        <button type="submit">Entrar</button>
     </form>
-    <a href="{% url 'login' %}">Já tem uma conta? Faça o login aqui</a>
+    <a href="{% url 'register' %}">Ainda não tem uma conta? Registre-se aqui</a>
 </body>
 </html>
