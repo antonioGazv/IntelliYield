@@ -4,7 +4,7 @@
 <html>
 
 <head>
-  <title>Editar Conta</title>
+  <title>Alterar Senha</title>
   <link rel="stylesheet" href="{% static 'css/style.css' %}">
 </head>
 
@@ -26,11 +26,11 @@
     </a>
   </div>
   <div class="formulario">
-    <h2>Editar Conta</h2>
+    <h2>Alterar Senha</h2>
     <form method="post">
-      {% csrf_token %}
-      {{ form }}
-      <button type="submit">Salvar Edições</button>
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Confirmar alteração</button>
     </form>
   </div>
 </body>

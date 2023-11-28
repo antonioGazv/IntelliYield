@@ -2,10 +2,12 @@
 
 <!DOCTYPE html>
 <html>
+
 <head>
     <title>Excluir Conta</title>
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
 </head>
+
 <body>
     <div id="header">
         <h1>INTELLIYIELD</h1>
@@ -23,12 +25,14 @@
                 </svg></button>
         </a>
     </div>
-    <h2>Excluir Conta</h2>
-    <form method="post">
-        {% csrf_token %}
-        <p>Tem certeza de que deseja excluir sua conta? Esta ação é irreversível.</p>
-        <button type="submit">Confirmar Exclusão</button>
-    </form
-    
+    <div class="formulario">
+        <h2>Excluir Conta</h2>
+        <form method="post">
+            {% csrf_token %}
+            <p>Tem certeza de que deseja excluir sua conta? Esta ação é irreversível.</p>
+            <button type="submit">Confirmar Exclusão</button>
+        </form>
+    </div>
 </body>
+
 </html>

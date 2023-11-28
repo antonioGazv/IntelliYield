@@ -6,6 +6,10 @@ body {
     color: #fff;
 }
 
+a {
+    color: white;
+}
+
 #header {
     background-color: #27172b;
     color: #fff;
@@ -25,7 +29,7 @@ h1 {
 }
 
 
-#formulario {
+.formulario {
     max-width: 400px;
     margin: 0 auto;
     padding: 20px;
@@ -46,7 +50,8 @@ label {
 }
 
 input[type="text"],
-input[type="number"] {
+input[type="number"],
+input[type="password"] {
     padding: 10px;
     margin-bottom: 10px;
     border: 1px solid #ccc;
@@ -60,6 +65,7 @@ button{
     color: #fff;
     border: none;
     padding: 10px 20px;
+    margin: 5px;
     cursor: pointer;
 }
 

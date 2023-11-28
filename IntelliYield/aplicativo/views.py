@@ -1,6 +1,6 @@
-from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.forms import UserCreationForm, PasswordChangeForm
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth import authenticate, logout
+from django.contrib.auth import authenticate, logout, update_session_auth_hash
 from django.contrib.auth import login as auth_login  
 from django.contrib import messages
 from django.shortcuts import render, redirect
@@ -20,6 +20,8 @@ def register(request):
             user = authenticate(username=username, password=password)
             auth_login(request, user)
             return redirect('index')
+        else:
+            messages.error(request, "Dados inválidos.")
     context = {'form' :form}
     return render(request, 'register.html', context)
 
@@ -30,9 +32,9 @@ def user_login(request):
         user = authenticate(username=username, password=password)
         if user is not None:
             auth_login(request, user)
-            return redirect('index')  # Redireciona para a URL definida em LOGIN_REDIRECT_URL
+            return redirect('index')
         else:
-            messages.error(request, "Dados incorretos.")
+            messages.error(request, "Dados inválidos.")
             return redirect('login.html')
         
     return render(request, 'login.html')
@@ -52,6 +54,21 @@ def editarConta(request):
         form = CustomUserChangeForm(instance=request.user)
     return render(request, 'editarConta.html', {'form': form})
 
+@login_required
+def alterarSenha(request):
+    if request.method == 'POST':
+        form = PasswordChangeForm(request.user, request.POST)
+        if form.is_valid():
+            user = form.save()
+            update_session_auth_hash(request, user)
+            messages.success(request, 'Sua senha foi alterada com sucesso!')
+            return redirect('index')
+        else:
+            messages.error(request, 'Por favor, corrija os erros abaixo.')
+    else:
+        form = PasswordChangeForm(request.user)
+
+    return render(request, 'alterarSenha.html', {'form': form})
 
 @login_required
 def excluirConta(request):
