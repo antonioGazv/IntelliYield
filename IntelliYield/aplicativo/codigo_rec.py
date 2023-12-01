@@ -9,7 +9,7 @@ from sklearn.ensemble import RandomForestClassifier
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.svm import SVC
 from sklearn.discriminant_analysis import LinearDiscriminantAnalysis
-from .models import DetalhesRFC, DetalhesKNN, DetalhesSVC, DetalhesLDA, Previsoes
+from .models import Previsoes
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 
@@ -79,19 +79,18 @@ class Ferramenta_REC:
     @login_required
     def salvar_resultados(self, request, predicoes, detalhesrfc, detalhesknn, detalhessvc, detalheslda):
         current_user = self.user
-        previsoes_obj = Previsoes.objects.create(user=current_user, predicaoTot=predicoes)
-
-        for detalhe in detalhesrfc:
-            DetalhesRFC.objects.create(user=current_user, predicaoRFC=detalhe['Predição'], precisaoRFC=detalhe['Precisão'], nome=detalhe['Nome'])
-
-        for detalhe in detalhesknn:
-            DetalhesKNN.objects.create(user=current_user, predicaoKNN=detalhe['Predição'], precisaoKNN=detalhe['Precisão'], nome=detalhe['Nome'])
-
-        for detalhe in detalhessvc:
-            DetalhesSVC.objects.create(user=current_user, predicaoSVC=detalhe['Predição'], precisaoSVC=detalhe['Precisão'], nome=detalhe['Nome'])
-
-        for detalhe in detalheslda:
-            DetalhesLDA.objects.create(user=current_user, predicaoLDA=detalhe['Predição'], precisaoLDA=detalhe['Precisão'], nome=detalhe['Nome'])
+        previsoes_obj = Previsoes.objects.create(
+            user=current_user,
+            predicaoTot=predicoes,
+            predicaoRFC=detalhesrfc[0]['Predição'],
+            precisaoRFC=detalhesrfc[0]['Precisão'],
+            predicaoKNN=detalhesknn[0]['Predição'],
+            precisaoKNN=detalhesknn[0]['Precisão'],
+            predicaoSVC=detalhessvc[0]['Predição'],
+            precisaoSVC=detalhessvc[0]['Precisão'],
+            predicaoLDA=detalheslda[0]['Predição'],
+            precisaoLDA=detalheslda[0]['Precisão'],
+        )
 
         return HttpResponse("Resultados salvos com sucesso")
 
@@ -125,13 +124,8 @@ class Ferramenta_REC:
             'Precisão': ldaPrecisao
         })
 
-        predicoes = statistics.mode([tuple(array) for array in [rfcPredUser, knnPredUser, svcPredUser, ldaPredUser]])
+        predicaoTot = statistics.mode([tuple(array) for array in [rfcPredUser, knnPredUser, svcPredUser, ldaPredUser]])
 
-        detalhes_totais = detalhesrfc + detalhesknn + detalhessvc + detalheslda
-        detalhes_totais_str = "\n".join([f"{detalhe['Nome']}: {detalhe['Predição']} (Precisão: {detalhe['Precisão']})" for detalhe in detalhes_totais])
+        self.salvar_resultados(request, predicaoTot, detalhesrfc, detalhesknn, detalhessvc, detalheslda)
 
-        # Historico.objects.create(usuario=request.user, predicao=predicoes, detalhes=detalhes_totais_str)
-
-        self.salvar_resultados(request, predicoes, detalhesrfc, detalhesknn, detalhessvc, detalheslda)
-
-        return predicoes, detalhesrfc, detalhesknn, detalhessvc, detalheslda
+        return predicaoTot, detalhesrfc, detalhesknn, detalhessvc, detalheslda

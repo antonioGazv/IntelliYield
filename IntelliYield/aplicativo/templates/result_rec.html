@@ -26,15 +26,40 @@
         </a>
     </div>
     <div id="resultado">
-        <p>Predição de plantio: {{ predicoes }}</p>
-        <div id="detalhes">
-            <h2>Detalhes dos algoritmos:</h2>
-            <p>{{ detalhesrfc }}</p>
-            <p>{{ detalhesknn }}</p>
-            <p>{{ detalhessvc }}</p>
-            <p>{{ detalheslda }}</p>
-        </div>
+        <p>Predição de plantio: {{ previsao_obj.predicaoTot|slice:"2:-3" }}</p>
+        
+        <h2>Detalhes dos algoritmos:</h2>
+    <div id="detalhes">
+        
+            <table border="1">
+                <tr>
+                    <th>Nome</th>
+                    <th>Predição</th>
+                    <th>Precisão</th>
+                </tr>
+                <tr>
+                    <td>Random Forest Classifier</td>
+                    <td>{{ previsao_obj.predicaoRFC|slice:"2:-2" }}</td>
+                    <td>{{ previsao_obj.precisaoRFC|floatformat:4  }}</td>
+                </tr>
+                <tr>
+                    <td>K Nearest Neighbors</td>
+                    <td>{{ previsao_obj.predicaoKNN|slice:"2:-2" }}</td>
+                    <td>{{ previsao_obj.precisaoKNN|floatformat:4  }}</td>
+                </tr>
+                <tr>
+                    <td>Support Vector Classifier</td>
+                    <td>{{ previsao_obj.predicaoSVC|slice:"2:-2" }}</td>
+                    <td>{{ previsao_obj.precisaoSVC|floatformat:4  }}</td>
+                </tr>
+                <tr>
+                    <td>Linear Discriminant Analysis</td>
+                    <td>{{ previsao_obj.predicaoLDA|slice:"2:-2" }}</td>
+                    <td>{{ previsao_obj.precisaoLDA|floatformat:4  }}</td>
+                </tr>
+            </table>
     </div>
+   
 </body>
 
 </html>

@@ -28,6 +28,12 @@ h1 {
     margin: 20px;
 }
 
+#resultado h2{
+    font-size: 30px;
+    text-align: center;
+    margin: 20px;
+}
+
 
 .formulario {
     max-width: 400px;
@@ -48,6 +54,7 @@ label {
     margin-bottom: 5px;
     color: #fff;
 }
+
 
 input[type="text"],
 input[type="number"],
@@ -81,5 +88,17 @@ button:hover {
 }
 
 #detalhes{
+    display: flex;
+    justify-content: center;
+    align-items: center;
     font-size: 30px;
+    text-align: center;
+}
+
+#historico{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 20px;
+    text-align: center;
 }

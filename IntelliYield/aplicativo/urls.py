@@ -9,7 +9,7 @@ urlpatterns = [
     path('login/', views.user_login, name='login'),
     path('accounts/', include('django.contrib.auth.urls')),
     path('logout/', views.user_logout, name='user_logout'),
-    # path('historico/', views.historico, name='historico'),
+    path('historico/', views.historico, name='historico'),
     path('editarConta/', views.editarConta, name='editarConta'),
     path('password/', auth_views.PasswordChangeView.as_view(template_name='alterarSenha.html', success_url=""), name='password'),
     path('excluirConta/', views.excluirConta, name='excluirConta'),

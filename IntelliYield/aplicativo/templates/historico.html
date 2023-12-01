@@ -25,20 +25,38 @@
                 </svg></button>
         </a>
     </div>
-    <div>
-        {% if resultados %}
-        <h1>Histórico de Resultados</h1>
-        <ul>
-            {% for resultado in resultados %}
-            <li>
-                <strong>Predição:</strong> {{ resultado.predicao }}<br>
-                <strong>Detalhes:</strong> {{ resultado.detalhes }}<br>
-            </li>
-            {% endfor %}
-        </ul>
-        {% else %}
-        <p>Nenhum resultado disponível.</p>
-        {% endif %}
+    <div id="resultado">
+        <h2>Histórico de previsões</h2>
+        <div id="historico">
+            <table border="1">
+                <tr>
+                    <th>ID</th>
+                    <th>Previsão Total</th>
+                    <th>Previsão KNN</th>
+                    <th>Precisão KNN</th>
+                    <th>Previsão LDA</th>
+                    <th>Precisão LDA</th>
+                    <th>Previsão RFC</th>
+                    <th>Precisão RFC</th>
+                    <th>Previsão SVC</th>
+                    <th>Precisão SVC</th>
+                </tr>
+                {% for previsao in historico %}
+                    <tr>
+                        <td>{{ previsao.id }}</td>
+                        <td>{{ previsao.predicaoTot|slice:"2:-3" }}</td>
+                        <td>{{ previsao.predicaoKNN|slice:"2:-2" }}</td>
+                        <td>{{ previsao.precisaoKNN|floatformat:4  }}</td>
+                        <td>{{ previsao.predicaoLDA|slice:"2:-2" }}</td>
+                        <td>{{ previsao.precisaoLDA|floatformat:4  }}</td>
+                        <td>{{ previsao.predicaoRFC|slice:"2:-2" }}</td>
+                        <td>{{ previsao.precisaoRFC|floatformat:4  }}</td>
+                        <td>{{ previsao.predicaoSVC|slice:"2:-2" }}</td>
+                        <td>{{ previsao.precisaoSVC|floatformat:4  }}</td>
+                    </tr>
+                {% endfor %}
+            </table>
+        </div>
     </div>
 </body>
 

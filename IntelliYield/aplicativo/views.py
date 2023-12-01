@@ -6,7 +6,7 @@ from django.contrib import messages
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from .codigo_rec import Ferramenta_REC
-# from .models import Historico
+from .models import Previsoes
 from .forms import MLForm, CustomUserChangeForm
 
 ferramenta_rec = Ferramenta_REC()
@@ -79,10 +79,11 @@ def excluirConta(request):
         return redirect('index')
     return render(request, 'excluirConta.html')
 
-# @login_required
-# def historico(request):
-#     resultados = Historico.objects.filter(usuario=request.user)
-#     return render(request, 'historico.html', {'resultados': resultados})
+@login_required
+def historico(request):
+    previsoes = Previsoes.objects.filter(user=request.user).order_by('-id')
+
+    return render(request, 'historico.html', {'historico': previsoes})
 
 @login_required
 def perfil(request):
@@ -109,11 +110,16 @@ def user_input(request):
             svcPredUser, svcPrecisao = ferramenta_rec.svc(X_train_norm, y_train, X_test, user_data_norm, y_test)
             ldaPredUser, ldaPrecisao = ferramenta_rec.lda(X_train_norm, y_train, X_test, user_data_norm, y_test)
 
-            predicoes, detalhesrfc, detalhesknn, detalhessvc, detalheslda = ferramenta_rec.resultados(request, rfcPredUser, knnPredUser, svcPredUser, ldaPredUser, rfcPrecisao, knnPrecisao, svcPrecisao, ldaPrecisao)
+            predicoes = ferramenta_rec.resultados(request, rfcPredUser, knnPredUser, svcPredUser, ldaPredUser, rfcPrecisao, knnPrecisao, svcPrecisao, ldaPrecisao)
 
-            return render(request, 'result_rec.html', {'predicoes': predicoes, 'detalhesrfc': detalhesrfc, 'detalhesknn': detalhesknn, 'detalhessvc': detalhessvc, 'detalheslda': detalheslda})
+            
 
-            ferramenta_rec.salvar_resultados(request, predicoes, detalhesrfc, detalhesknn, detalhessvc, detalheslda)
+            # Recupere os dados do banco de dados
+            previsao_obj = Previsoes.objects.latest('id')
+
+            return render(request, 'result_rec.html', {
+                'previsao_obj': previsao_obj
+            })
     else:
         form = MLForm()
 
