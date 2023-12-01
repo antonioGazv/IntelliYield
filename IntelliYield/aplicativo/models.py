@@ -29,7 +29,7 @@ class Previsoes(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     predicaoTot = models.CharField(max_length=255)
     
-class Historico(models.Model):
-    usuario = models.ForeignKey(User, on_delete=models.CASCADE)
-    predicao = models.CharField(max_length=255)
-    detalhes = models.TextField()
+# class Historico(models.Model):
+#     usuario = models.ForeignKey(User, on_delete=models.CASCADE)
+#     predicao = models.CharField(max_length=255)
+#     detalhes = models.TextField()
